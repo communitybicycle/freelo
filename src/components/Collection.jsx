@@ -11,7 +11,7 @@ const Container = styled.div`
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   width: 250px;
-  min-height: 100px;
+  min-height: 80px;
   padding: 0 9px;
   margin-right: 21px;
 `;

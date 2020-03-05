@@ -5,9 +5,12 @@ import styled from "styled-components";
 import Collection from "./Collection";
 
 const Container = styled.div`
+  background-color: #f1f4f7;
+  height: 100%;
   padding: 23px 72px 0 72px;
 
   display: flex;
+  align-items: flex-start;
 `;
 
 class Board extends Component {
