@@ -13,7 +13,7 @@ const Container = styled.div`
 class Board extends Component {
   state = initialData;
   onDragEnd = result => {
-    const { destination, source, draggableId, type } = result;
+    const { destination, source, draggableId } = result;
     if (!destination) return;
     if (
       destination.droppableId === source.droppableId &&
@@ -87,7 +87,14 @@ class Board extends Component {
               taskId => this.state.tasks[taskId]
             );
 
-            return <Collection column={column} tasks={tasks} index={index} />;
+            return (
+              <Collection
+                key={column.id}
+                column={column}
+                tasks={tasks}
+                index={index}
+              />
+            );
           })}
         </DragDropContext>
       </Container>
