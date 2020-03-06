@@ -9,6 +9,8 @@ import "normalize.css";
 
 const store = createStore(rootReducer);
 
+window.store = store;
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

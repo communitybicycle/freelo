@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import styled from "styled-components";
 import Task from "./Task";
@@ -57,23 +57,27 @@ const Footer = styled.div`
 class Collection extends Component {
   render() {
     return (
-      <Container>
-        <Header>
-          <Title>{this.props.column.title}</Title>
-          <MoreHorizIcon />
-        </Header>
-        <Droppable droppableId={this.props.column.id}>
-          {provided => (
-            <TaskList {...provided.droppableProps} ref={provided.innerRef}>
-              {this.props.tasks.map((task, index) => (
-                <Task key={task.id} task={task} index={index} />
-              ))}
-              {provided.placeholder}
-            </TaskList>
-          )}
-        </Droppable>
-        <Footer>+ Add another card</Footer>
-      </Container>
+      <Draggable draggableId={this.props.column.id} index={this.props.index}>
+        {provided => (
+          <Container {...provided.draggableProps} ref={provided.innerRef}>
+            <Header {...provided.dragHandleProps}>
+              <Title>{this.props.column.title}</Title>
+              <MoreHorizIcon />
+            </Header>
+            <Droppable droppableId={this.props.column.id}>
+              {provided => (
+                <TaskList {...provided.droppableProps} ref={provided.innerRef}>
+                  {this.props.tasks.map((task, index) => (
+                    <Task key={task.id} task={task} index={index} />
+                  ))}
+                  {provided.placeholder}
+                </TaskList>
+              )}
+            </Droppable>
+            <Footer>+ Add another card</Footer>
+          </Container>
+        )}
+      </Draggable>
     );
   }
 }

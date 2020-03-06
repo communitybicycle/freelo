@@ -1,6 +1,11 @@
 import React, { Component } from "react";
-import initialData from "../initial-data";
-import { DragDropContext } from "react-beautiful-dnd";
+import { connect } from "react-redux";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import {
+  moveCollections,
+  moveTaskWithinCollection,
+  moveTaskAcrossCollections
+} from "../actions";
 import styled from "styled-components";
 import Collection from "./Collection";
 
@@ -14,9 +19,8 @@ const Container = styled.div`
 `;
 
 class Board extends Component {
-  state = initialData;
   onDragEnd = result => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
     if (!destination) return;
     if (
       destination.droppableId === source.droppableId &&
@@ -25,8 +29,18 @@ class Board extends Component {
       return;
     }
 
-    const start = this.state.columns[source.droppableId];
-    const finish = this.state.columns[destination.droppableId];
+    // Moving collections
+    if (type === "column") {
+      const newColumnOrder = Array.from(this.props.columnOrder);
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
+
+      this.props.moveCollections(newColumnOrder);
+      return;
+    }
+
+    const start = this.props.columns[source.droppableId];
+    const finish = this.props.columns[destination.droppableId];
 
     // Movement within collection
     if (start === finish) {
@@ -40,15 +54,7 @@ class Board extends Component {
         taskIds: newTaskIds
       };
 
-      const newState = {
-        ...this.state,
-        columns: {
-          ...this.state.columns,
-          [newColumn.id]: newColumn
-        }
-      };
-
-      this.setState(newState);
+      this.props.moveTaskWithinCollection(source.droppableId, newColumn);
       return;
     }
 
@@ -67,42 +73,51 @@ class Board extends Component {
       taskIds: finishTaskIds
     };
 
-    const newState = {
-      ...this.state,
-      columns: {
-        ...this.state.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish
-      }
-    };
-
-    this.setState(newState);
+    this.props.moveTaskAcrossCollections(newStart, newFinish);
     return;
   };
 
   render() {
     return (
-      <Container>
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          {this.state.columnOrder.map((columnId, index) => {
-            const column = this.state.columns[columnId];
-            const tasks = column.taskIds.map(
-              taskId => this.state.tasks[taskId]
-            );
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
+          {provided => (
+            <Container {...provided.droppableProps} ref={provided.innerRef}>
+              {this.props.columnOrder.map((columnId, index) => {
+                const column = this.props.columns[columnId];
+                const tasks = column.taskIds.map(
+                  taskId => this.props.tasks[taskId]
+                );
 
-            return (
-              <Collection
-                key={column.id}
-                column={column}
-                tasks={tasks}
-                index={index}
-              />
-            );
-          })}
-        </DragDropContext>
-      </Container>
+                return (
+                  <Collection
+                    key={column.id}
+                    column={column}
+                    tasks={tasks}
+                    index={index}
+                  />
+                );
+              })}
+            </Container>
+          )}
+        </Droppable>
+      </DragDropContext>
     );
   }
 }
 
-export default Board;
+const mapStateToProps = state => {
+  return { ...state.board };
+};
+
+const mapDispatchToProps = {
+  moveCollections,
+  moveTaskWithinCollection,
+  moveTaskAcrossCollections
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);
