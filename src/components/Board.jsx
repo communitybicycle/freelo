@@ -102,6 +102,7 @@ class Board extends Component {
                   />
                 );
               })}
+              {provided.placeholder}
             </Container>
           )}
         </Droppable>

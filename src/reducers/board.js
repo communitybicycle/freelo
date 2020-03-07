@@ -11,6 +11,80 @@ const board = (state = initialData, action) => {
           completed: false
         }
       ];
+
+    case "ADD_NEW_TASK":
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          [action.taskId]: {
+            id: action.taskId,
+            content: ""
+          }
+        },
+        columns: {
+          ...state.columns,
+          [action.collectionId]: {
+            ...state.columns[action.collectionId],
+            taskIds: [
+              ...state.columns[action.collectionId].taskIds,
+              action.taskId
+            ]
+          }
+        },
+        meta: {
+          editingTask: action.taskId
+        }
+      };
+
+    case "EDIT_TASK":
+      return {
+        ...state,
+        meta: {
+          editingTask: action.taskId
+        }
+      };
+
+    case "SAVE_TASK":
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          [action.taskId]: {
+            id: action.taskId,
+            content: action.content
+          }
+        },
+        meta: {
+          editingTask: null
+        }
+      };
+
+    case "DELETE_TASK":
+      let newTasklist = {
+        ...state.tasks
+      };
+      delete newTasklist[action.taskId];
+      let newTaskIds = state.columns[action.collectionId].taskIds.filter(
+        item => item !== action.taskId
+      );
+      return {
+        ...state,
+        tasks: {
+          ...newTasklist
+        },
+        columns: {
+          ...state.columns,
+          [action.collectionId]: {
+            ...state.columns[action.collectionId],
+            taskIds: [...newTaskIds]
+          }
+        },
+        meta: {
+          editingTask: null
+        }
+      };
+
     case "MOVE_TASK_WITHIN_COLLECTION":
       return {
         ...state,
@@ -34,7 +108,7 @@ const board = (state = initialData, action) => {
       return {
         ...state,
         columnOrder: action.newColumnOrder
-      }
+      };
 
     default:
       return state;
