@@ -1,10 +1,5 @@
 let nextTaskId = 5;
-
-export const addTodo = text => ({
-  type: "ADD_TODO",
-  id: nextTaskId++,
-  text
-});
+let nextCollectionId = 4;
 
 export const addNewTask = collectionId => ({
   type: "ADD_NEW_TASK",
@@ -45,3 +40,19 @@ export const moveCollections = newColumnOrder => ({
   type: "MOVE_COLLECTIONS",
   newColumnOrder
 });
+
+export const addNewCollection = () => ({
+  type: "ADD_NEW_COLLECTION",
+  collectionId: `column-${nextCollectionId++}`
+});
+
+export const editCollectionTitle = collectionId => ({
+  type: "EDIT_COLLECTION_TITLE",
+  collectionId
+});
+
+export const saveCollectionTitle = (collectionId, title) => ({
+  type: "SAVE_COLLECTION_TITLE",
+  collectionId,
+  title
+})

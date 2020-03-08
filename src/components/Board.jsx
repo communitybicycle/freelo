@@ -4,18 +4,42 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   moveCollections,
   moveTaskWithinCollection,
-  moveTaskAcrossCollections
+  moveTaskAcrossCollections,
+  addNewCollection
 } from "../actions";
 import styled from "styled-components";
 import Collection from "./Collection";
 
 const Container = styled.div`
+  overflow-x: auto;
   background-color: #f1f4f7;
   height: 100%;
   padding: 23px 72px 0 72px;
 
   display: flex;
   align-items: flex-start;
+  
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+`;
+
+const NewColumn = styled.div`
+  background: rgba(255,255,255,0.3);
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+  min-width: 250px;
+  width: 250px;
+  min-height: 48px;
+  padding: 0 9px;
+  margin-right: 21px;`
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 12px 0 12px 3px;
+  height: 24px;
+  font-size: 16px;
+  color: rgba(0,0,0,0.6);
 `;
 
 class Board extends Component {
@@ -77,6 +101,10 @@ class Board extends Component {
     return;
   };
 
+  handleNewCollection = () => {
+    this.props.addNewCollection();
+  }
+
   render() {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
@@ -97,12 +125,14 @@ class Board extends Component {
                   <Collection
                     key={column.id}
                     column={column}
+                    collectionId={column.id}
                     tasks={tasks}
                     index={index}
                   />
                 );
               })}
               {provided.placeholder}
+              <NewColumn onClick={this.handleNewCollection}><Header>+ Add another list</Header></NewColumn>
             </Container>
           )}
         </Droppable>
@@ -118,7 +148,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   moveCollections,
   moveTaskWithinCollection,
-  moveTaskAcrossCollections
+  moveTaskAcrossCollections,
+  addNewCollection
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

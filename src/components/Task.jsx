@@ -12,6 +12,7 @@ const Container = styled.div`
   padding: 6px;
   margin-bottom: 8px;
   min-height: 17px;
+  overflow-wrap: break-word;
 `;
 
 const Textbox = styled.div`
@@ -30,9 +31,6 @@ const Textbox = styled.div`
     width: 236px;
     min-height: 17px;
     padding: 6px;
-
-    font-family: Roboto;
-    font-style: normal;
     font-weight: 300;
     font-size: 14px;
   }
@@ -45,6 +43,12 @@ class Task extends Component {
       content: this.props.task.content
     };
   }
+
+  saveTask = () => {
+    this.state.content === ""
+      ? this.props.deleteTask(this.props.task.id, this.props.columnId)
+      : this.props.saveTask(this.props.task.id, this.state.content);
+  };
 
   handleClick = () => {
     this.props.editTask(this.props.task.id);
@@ -61,11 +65,15 @@ class Task extends Component {
     this.setState({ content: evt.target.value });
   };
 
+  handleKeyPress = evt => {
+    if (evt.key === "Enter") {
+      this.saveTask();
+    }
+  };
+
   handleDeselect = evt => {
     // evt.stopPropagation();
-    this.state.content === ""
-      ? this.props.deleteTask(this.props.task.id, this.props.columnId)
-      : this.props.saveTask(this.props.task.id, this.state.content);
+    this.saveTask();
   };
 
   renderTask = () => {
@@ -82,6 +90,7 @@ class Task extends Component {
             defaultValue={this.props.task.content}
             onFocus={this.handleMoveCursorToEnd}
             onChange={this.handleChange}
+            onKeyPress={this.handleKeyPress}
             placeholder="Enter a new title for this task..."
             autoFocus
           />
@@ -92,7 +101,7 @@ class Task extends Component {
       <Draggable
         draggableId={this.props.task.id}
         index={this.props.index}
-        isDragDisabled={this.props.editingTask !== null}
+        isDragDisabled={this.props.editingTask !== false}
       >
         {provided => (
           <Container

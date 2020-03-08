@@ -1,26 +1,100 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addNewTask } from "../actions";
+import {
+  addNewTask,
+  editCollectionTitle,
+  saveCollectionTitle
+} from "../actions";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import TextareaAutosize from "react-textarea-autosize";
 import Task from "./Task";
-import { Container, Header, Title, TaskList, Footer } from "./CollectionStyles";
+import {
+  Container,
+  Header,
+  Title,
+  TitleInput,
+  TaskList,
+  Footer
+} from "./CollectionStyles";
 
 class Collection extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: this.props.column.title
+    };
+  }
+
   handleNewTask = () => {
     this.props.addNewTask(this.props.column.id);
   };
 
+  handleEditTitle = () => {
+    this.props.editCollectionTitle(this.props.column.id);
+  };
+
+  handleMoveCursorToEnd = evt => {
+    evt.target.setSelectionRange(
+      evt.target.value.length,
+      evt.target.value.length
+    );
+  };
+
+  handleChange = evt => {
+    this.setState({ title: evt.target.value });
+  };
+
+  handleKeyPress = evt => {
+    if (evt.key === "Enter") {
+      this.props.saveCollectionTitle(this.props.collectionId, this.state.title);
+    }
+  };
+
+  handleDeselect = evt => {
+    // evt.stopPropagation();
+    this.props.saveCollectionTitle(this.props.collectionId, this.state.title);
+  };
+
+  renderCollectionTitle = () => {
+    const { editingCollectionTitle, collectionId } = this.props;
+    if (editingCollectionTitle && editingCollectionTitle === collectionId) {
+      return (
+        <TitleInput onBlur={this.handleDeselect}>
+          <TextareaAutosize
+            ref={node => (this.textArea = node)}
+            name="test"
+            id="collection-textarea"
+            defaultValue={this.state.title}
+            onFocus={this.handleMoveCursorToEnd}
+            onChange={this.handleChange}
+            onKeyPress={this.handleKeyPress}
+            placeholder="Enter list title..."
+            autoFocus
+          />
+        </TitleInput>
+      );
+    }
+  };
+
   render() {
+    const { editingCollectionTitle, collectionId, index } = this.props;
     return (
-      <Draggable draggableId={this.props.column.id} index={this.props.index}>
+      <Draggable draggableId={collectionId} index={index}>
         {provided => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
             <Header {...provided.dragHandleProps}>
-              <Title>{this.props.column.title}</Title>
+              {editingCollectionTitle &&
+              editingCollectionTitle === collectionId ? (
+                this.renderCollectionTitle()
+              ) : (
+                <Title onClick={this.handleEditTitle}>
+                  {this.props.column.title}
+                </Title>
+              )}
               <MoreHorizIcon />
             </Header>
-            <Droppable droppableId={this.props.column.id}>
+            <Droppable droppableId={collectionId}>
               {provided => (
                 <TaskList {...provided.droppableProps} ref={provided.innerRef}>
                   {this.props.tasks.map((task, index) => (
@@ -28,7 +102,7 @@ class Collection extends Component {
                       key={task.id}
                       task={task}
                       index={index}
-                      columnId={this.props.column.id}
+                      columnId={collectionId}
                     />
                   ))}
                   {provided.placeholder}
@@ -43,8 +117,14 @@ class Collection extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  addNewTask
+const mapStateToProps = state => {
+  return { editingCollectionTitle: state.board.meta.editingCollectionTitle };
 };
 
-export default connect(null, mapDispatchToProps)(Collection);
+const mapDispatchToProps = {
+  addNewTask,
+  editCollectionTitle,
+  saveCollectionTitle
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Collection);

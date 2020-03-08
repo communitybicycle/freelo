@@ -2,16 +2,6 @@ import initialData from "../initial-data";
 
 const board = (state = initialData, action) => {
   switch (action.type) {
-    case "ADD_TODO":
-      return [
-        ...state,
-        {
-          id: action.id,
-          text: action.text,
-          completed: false
-        }
-      ];
-
     case "ADD_NEW_TASK":
       return {
         ...state,
@@ -56,7 +46,7 @@ const board = (state = initialData, action) => {
           }
         },
         meta: {
-          editingTask: null
+          editingTask: false
         }
       };
 
@@ -81,7 +71,7 @@ const board = (state = initialData, action) => {
           }
         },
         meta: {
-          editingTask: null
+          editingTask: false
         }
       };
 
@@ -108,6 +98,49 @@ const board = (state = initialData, action) => {
       return {
         ...state,
         columnOrder: action.newColumnOrder
+      };
+
+    case "ADD_NEW_COLLECTION":
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.collectionId]: {
+            id: action.collectionId,
+            title: "",
+            taskIds: []
+          }
+        },
+        columnOrder: [...state.columnOrder, action.collectionId],
+        meta: {
+          ...state.meta,
+          editingCollectionTitle: action.collectionId
+        }
+      };
+
+    case "EDIT_COLLECTION_TITLE":
+      return {
+        ...state,
+        meta: {
+          editingTask: false,
+          editingCollectionTitle: action.collectionId
+        }
+      };
+
+    case "SAVE_COLLECTION_TITLE":
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.collectionId]: {
+            ...state.columns[action.collectionId],
+            title: action.title
+          }
+        },
+        meta: {
+          editingTask: false,
+          editingCollectionTitle: false
+        }
       };
 
     default:
