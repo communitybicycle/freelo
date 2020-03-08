@@ -46,6 +46,11 @@ export const addNewCollection = () => ({
   collectionId: `column-${nextCollectionId++}`
 });
 
+export const deleteCollection = collectionId => ({
+  type: "DELETE_COLLECTION",
+  collectionId
+});
+
 export const editCollectionTitle = collectionId => ({
   type: "EDIT_COLLECTION_TITLE",
   collectionId
@@ -55,4 +60,4 @@ export const saveCollectionTitle = (collectionId, title) => ({
   type: "SAVE_COLLECTION_TITLE",
   collectionId,
   title
-})
+});

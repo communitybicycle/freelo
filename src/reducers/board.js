@@ -118,6 +118,20 @@ const board = (state = initialData, action) => {
         }
       };
 
+    case "DELETE_COLLECTION":
+      let newCollections = {
+        ...state.columns
+      };
+      delete newCollections[action.collectionId];
+      let newColumnOrder = state.columnOrder.filter(
+        item => item !== action.collectionId
+      );
+      return {
+        ...state,
+        columns: newCollections,
+        columnOrder: newColumnOrder
+      };
+
     case "EDIT_COLLECTION_TITLE":
       return {
         ...state,

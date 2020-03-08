@@ -14,18 +14,22 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 12px 0 12px 3px;
+  padding: 6px 0 6px 3px;
 `;
 
 const Title = styled.div`
+  padding-top: 3px;
+`;
+
+const TitleText = styled.div`
+  // height: 24px;
   font-weight: bold;
   font-size: 16px;
   padding: 0;
   letter-spacing: 0.15px;
   line-height: 1.5;
-  width: 220px;
   overflow-wrap: break-word;
-  flex: 1;
+  width: 217px;
 `;
 
 const TitleInput = styled.div`
@@ -34,7 +38,7 @@ const TitleInput = styled.div`
     display: block;
     outline: none;
     resize: none;
-    width: 220px;
+    width: 217px;
     border: none;
     font-weight: bold;
     font-size: 16px;
@@ -42,6 +46,11 @@ const TitleInput = styled.div`
     letter-spacing: 0.15px;
     line-height: 1.5;
   }
+`;
+
+const CollectionMenuIcon = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const TaskList = styled.div`
@@ -69,4 +78,13 @@ const Footer = styled.div`
   }
 `;
 
-export { Container, Header, Title, TitleInput, TaskList, Footer };
+export {
+  Container,
+  Header,
+  Title,
+  TitleText,
+  TitleInput,
+  TaskList,
+  CollectionMenuIcon,
+  Footer
+};

@@ -85,7 +85,7 @@ class Task extends Component {
         <Textbox onBlur={this.handleDeselect}>
           <TextareaAutosize
             ref={node => (this.textArea = node)}
-            name="test"
+            name="task-textarea"
             id="task-textarea"
             defaultValue={this.props.task.content}
             onFocus={this.handleMoveCursorToEnd}
@@ -118,6 +118,7 @@ class Task extends Component {
   };
 
   render() {
+    console.log("RENDERING TASK");
     return this.renderTask();
   }
 }
