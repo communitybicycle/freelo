@@ -13,35 +13,35 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
-  justify-content: space-between;
   padding: 6px 0 6px 3px;
 `;
 
 const Title = styled.div`
   padding-top: 3px;
+  width: 199px;
+  flex: 1;
 `;
 
 const TitleText = styled.div`
-  // height: 24px;
+  width: 199px;
   font-weight: bold;
   font-size: 16px;
   padding: 0;
   letter-spacing: 0.15px;
   line-height: 1.5;
   overflow-wrap: break-word;
-  width: 217px;
 `;
 
 const TitleInput = styled.div`
-  flex: 1;
   textarea {
     display: block;
     outline: none;
+    flex: 1;
     resize: none;
-    width: 217px;
     border: none;
     font-weight: bold;
     font-size: 16px;
+    width: 199px;
     padding: 0;
     letter-spacing: 0.15px;
     line-height: 1.5;
@@ -51,6 +51,8 @@ const TitleInput = styled.div`
 const CollectionMenuIcon = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: 24px;
+  flex-shrink: 0;
 `;
 
 const TaskList = styled.div`

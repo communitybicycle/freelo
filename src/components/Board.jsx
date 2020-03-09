@@ -14,24 +14,25 @@ const Container = styled.div`
   overflow-x: auto;
   background-color: #f1f4f7;
   height: 100%;
-  padding: 23px 72px 0 72px;
+  padding: 34px 72px 0 72px;
 
   display: flex;
   align-items: flex-start;
-  
+
   font-family: Roboto, sans-serif;
   font-style: normal;
 `;
 
 const NewColumn = styled.div`
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   min-width: 250px;
   width: 250px;
   min-height: 48px;
   padding: 0 9px;
-  margin-right: 21px;`
+  margin-right: 21px;
+`;
 
 const Header = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const Header = styled.div`
   padding: 12px 0 12px 3px;
   height: 24px;
   font-size: 16px;
-  color: rgba(0,0,0,0.6);
+  color: rgba(0, 0, 0, 0.6);
 `;
 
 class Board extends Component {
@@ -103,7 +104,7 @@ class Board extends Component {
 
   handleNewCollection = () => {
     this.props.addNewCollection();
-  }
+  };
 
   render() {
     return (
@@ -132,7 +133,9 @@ class Board extends Component {
                 );
               })}
               {provided.placeholder}
-              <NewColumn onClick={this.handleNewCollection}><Header>+ Add another list</Header></NewColumn>
+              <NewColumn onClick={this.handleNewCollection}>
+                <Header>+ Add another list</Header>
+              </NewColumn>
             </Container>
           )}
         </Droppable>
