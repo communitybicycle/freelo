@@ -166,7 +166,9 @@ class Collection extends Component {
                 </TaskList>
               )}
             </Droppable>
-            <Footer onClick={this.handleNewTask}>+ Add another card</Footer>
+            <Footer unselectable="on" onClick={this.handleNewTask}>
+              + Add another card
+            </Footer>
           </Container>
         )}
       </Draggable>
