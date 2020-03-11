@@ -24,14 +24,20 @@ const Container = styled.div`
 `;
 
 const NewColumn = styled.div`
-  background: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
-  min-width: 250px;
   width: 250px;
   min-height: 48px;
   padding: 0 9px;
   margin-right: 21px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: rgba(205, 205, 205, 0.2);
+    cursor: pointer;
+  }
 `;
 
 const Header = styled.div`

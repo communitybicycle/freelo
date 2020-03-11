@@ -12,6 +12,7 @@ const Container = styled.div`
   padding: 6px;
   margin-bottom: 8px;
   min-height: 17px;
+  letter-spacing: normal;
   overflow-wrap: break-word;
 `;
 
@@ -33,6 +34,7 @@ const Textbox = styled.div`
     padding: 6px;
     font-weight: 300;
     font-size: 14px;
+    letter-spacing: normal;
   }
 `;
 
